@@ -1,0 +1,39 @@
+server:
+  port: 7000
+spring:
+  application:
+    name: hee-frontend
+  zipkin:
+    baseUrl: http://localhost:9411
+    service:
+      name: hee-frontend
+    sender:
+      type: WEB
+  sleuth:
+    sampler:
+      probability: 1.0
+sample:
+  callUrl:
+    frontend: http://localhost:7000
+    backend: http://localhost:7001
+    module: http://localhost:7002
+---
+spring.profiles: backend
+server:
+  port: 7001
+spring:
+  application:
+    name: hee-backend
+  zipkin:
+    service:
+      name: hee-backend
+---
+spring.profiles: module
+server:
+  port: 7002
+spring:
+  application:
+    name: hee-module
+  zipkin:
+    service:
+      name: hee-module

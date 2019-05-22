@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +24,7 @@ import brave.sampler.Sampler;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/back")
 public class Backend {
 
 	private static int depth = 2;
@@ -34,15 +36,15 @@ public class Backend {
 	@Autowired
 	RestTemplate restTemplate;
 	
-	@Bean
-    public RestTemplate getRestTemplate() {
-        return new RestTemplate();
-    }
+//	@Bean
+//    public RestTemplate getRestTemplate() {
+//        return new RestTemplate();
+//    }
 	
-	@Bean
-	public Sampler sampler() {
-		return Sampler.ALWAYS_SAMPLE;
-	}
+//	@Bean
+//	public Sampler sampler() {
+//		return Sampler.ALWAYS_SAMPLE;
+//	}
 	
 	@GetMapping(value="/{name}")
 	public Component getComponentInfo(@PathVariable String name) throws Exception {
@@ -52,12 +54,12 @@ public class Backend {
 	}
 	
 	@GetMapping(value="/module/{name}/{type}")
-	public Component callModule(@PathVariable String name, @PathVariable String type) throws Exception {
+	public ResponseEntity<Component> callModule(@PathVariable String name, @PathVariable String type) throws Exception {
 		
 		LoggingUtil.logHeadersInfo(request);
 		
 		Component comp = restTemplate.getForObject(String.format("%s/module/%s/%s", callUrl, name, type), Component.class);
-		return comp;
+		return new ResponseEntity<Component>(comp, HttpStatus.OK);
 	}
 	
 }

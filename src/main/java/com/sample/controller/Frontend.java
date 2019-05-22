@@ -1,11 +1,7 @@
 package com.sample.controller;
 
-import java.time.LocalDateTime;
-
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -24,7 +20,7 @@ import brave.sampler.Sampler;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/")
+@RequestMapping("/front")
 public class Frontend {
 
 	private static int depth = 1;
@@ -51,17 +47,17 @@ public class Frontend {
 
 		LoggingUtil.logHeadersInfo(request);
 		
-		Component comp = restTemplate.getForObject(String.format("%s/api/%s", callUrl, name), Component.class);
+		Component comp = restTemplate.getForObject(String.format("%s/back/%s", callUrl, name), Component.class);
 		
 		return new ResponseEntity<Component>(comp, HttpStatus.OK);
 	}
 	
-	@GetMapping(value="/{name}")
-	public ResponseEntity<Component> getComponentInfo1depth(@PathVariable String name) throws Exception {
-
-		LoggingUtil.logHeadersInfo(request);
-		
-		return new ResponseEntity<Component>(new Component.Builder(name, LocalDateTime.now(), depth).isFrontend(true).build(), HttpStatus.OK);
-	}
+//	@GetMapping(value="/{name}")
+//	public ResponseEntity<Component> getComponentInfo1depth(@PathVariable String name) throws Exception {
+//
+//		LoggingUtil.logHeadersInfo(request);
+//		
+//		return new ResponseEntity<Component>(new Component.Builder(name, LocalDateTime.now(), depth).isFrontend(true).build(), HttpStatus.OK);
+//	}
 	
 }

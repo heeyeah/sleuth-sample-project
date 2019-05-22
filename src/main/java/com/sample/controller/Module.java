@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,10 +29,10 @@ public class Module {
 	@Autowired
 	HttpServletRequest request;
 	
-	@Bean
-	public Sampler sampler() {
-		return Sampler.ALWAYS_SAMPLE;
-	}
+//	@Bean
+//	public Sampler sampler() {
+//		return Sampler.ALWAYS_SAMPLE;
+//	}
 	
 	@GetMapping("/{name}/desc")
 	public Component printComponentDesc(@PathVariable String name) throws Exception {
@@ -41,10 +43,10 @@ public class Module {
 	}
 	
 	@GetMapping("/{name}/version")
-	public Component printComponentVersion(@PathVariable String name) throws Exception {
+	public ResponseEntity<Component> printComponentVersion(@PathVariable String name) throws Exception {
 		
 		LoggingUtil.logHeadersInfo(request);
 		
-		return new Component.Builder(name, LocalDateTime.now(), depth).isModule(true).version("v2").build();
+		return new ResponseEntity<Component>(new Component.Builder(name, LocalDateTime.now(), depth).isModule(true).version("v2").build(), HttpStatus.OK);
 	}
 }
