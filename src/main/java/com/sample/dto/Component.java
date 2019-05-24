@@ -15,6 +15,7 @@ public class Component {
 	private final String desc;
 	private final String version;
 	
+	
 	private Component(Builder builder) {
 		name = builder.name;
 		createDttm = builder.createDttm;
@@ -80,6 +81,46 @@ public class Component {
 		public Component build() {
 			return new Component(this);
 		}
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public LocalDateTime getCreateDttm() {
+		return createDttm;
+	}
+
+	public int getDepth() {
+		return depth;
+	}
+
+	public boolean isFrontend() {
+		return isFrontend;
+	}
+
+	public boolean isBackend() {
+		return isBackend;
+	}
+
+	public boolean isModule() {
+		return isModule;
+	}
+
+	public boolean isError() {
+		return isError;
+	}
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public String getVersion() {
+		return version;
 	}
 
 	@Override

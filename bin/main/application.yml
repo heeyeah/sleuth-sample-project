@@ -8,15 +8,35 @@ spring:
     service:
       name: hee-frontend
     sender:
-      type: WEB
+      type: RABBIT
   sleuth:
     sampler:
       probability: 1.0
+    messaging:
+      enabled: true
+      rabbit:
+        enabled: true
+  rabbitmq:
+    host: 192.168.99.100
+    username: guest
+    password: guest
+    port: 5672
+  cloud:
+    stream:
+      default:
+        contentType: application/json
+      bindings:
+        foodOrdersChannel:
+          destination: foodOrders
+        input:
+          destination: foodOrders # topic (I am using this term loosely here- it is actually called Exchange in RabbitMQ)
+          group: foodOrdersIntakeGroup #the name of the input group– this is the name of the queue that will be created and subscribed to the exchange in order to get the messages.
 sample:
   callUrl:
     frontend: http://localhost:7000
     backend: http://localhost:7001
     module: http://localhost:7002
+myqueue: testQueue
 ---
 spring.profiles: backend
 server:
