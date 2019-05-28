@@ -3,6 +3,7 @@ package com.sample.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,8 @@ import com.sample.util.LoggingUtil;
 @RequestMapping("/back")
 public class Backend {
 
-	private final String callUrl = System.getProperty("sample.callUrl.module", "http://localhost:7002");
+	@Value("${sample.callUrl.module}")
+	private String callUrl;
 	
 	@Autowired
 	HttpServletRequest request;

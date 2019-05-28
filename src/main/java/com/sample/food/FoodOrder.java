@@ -30,17 +30,6 @@ public class FoodOrder {
 		return orderDescription;
 	}
 
-//	public void setRestaurant(String restaurant) {
-//		this.restaurant = restaurant;
-//	}
-//
-//	public void setCustomerAddress(String customerAddress) {
-//		this.customerAddress = customerAddress;
-//	}
-//
-//	public void setOrderDescription(String orderDescription) {
-//		this.orderDescription = orderDescription;
-//	}
 
 	@Override
 	public String toString() {

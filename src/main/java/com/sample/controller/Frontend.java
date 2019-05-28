@@ -3,6 +3,7 @@ package com.sample.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,27 +21,16 @@ import brave.sampler.Sampler;
 @RequestMapping("/front")
 public class Frontend {
 
-	private static int depth = 1;
-	private final String callUrl = System.getProperty("sample.callUrl.backend", "http://localhost:7001");
+	@Value("${sample.callUrl.backend}")
+	private String callUrl;
 	
 	@Autowired
 	HttpServletRequest request;
 	
 	@Autowired
 	RestTemplate restTemplate;
-	
-	@Bean
-    public RestTemplate getRestTemplate() {
-        return new RestTemplate();
-    }
-	
-	@Bean
-	public Sampler sampler() {
-		return Sampler.ALWAYS_SAMPLE;
-	}
-	
-	
-	@GetMapping(value="/{name}")
+		
+	@GetMapping(value="/web/{name}")
 	public String arriveBackend(@PathVariable String name) throws Exception {
 
 		LoggingUtil.logHeadersInfo(request);
@@ -48,7 +38,7 @@ public class Frontend {
 		return restTemplate.getForObject(String.format("%s/back/%s", callUrl, name), String.class);
 	}
 	
-	@GetMapping(value="/last/{name}")
+	@GetMapping(value="/web/last/{name}")
 	public String arriveModule(@PathVariable String name) throws Exception {
 
 		LoggingUtil.logHeadersInfo(request);
@@ -62,6 +52,4 @@ public class Frontend {
 		
 		return restTemplate.getForObject(String.format("%s/back/module/%s/%s", callUrl, name, type), String.class);
 	}
-	
-	
 }

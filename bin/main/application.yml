@@ -8,7 +8,7 @@ spring:
     service:
       name: hee-frontend
     sender:
-      type: RABBIT
+      type: rabbit
   sleuth:
     sampler:
       probability: 1.0
@@ -23,8 +23,6 @@ spring:
     port: 5672
   cloud:
     stream:
-      default:
-        contentType: application/json
       bindings:
         foodOrdersChannel:
           destination: foodOrders
@@ -36,7 +34,9 @@ sample:
     frontend: http://localhost:7000
     backend: http://localhost:7001
     module: http://localhost:7002
-myqueue: testQueue
+custom:
+  queueName: customQ
+  exchangeName: customExc
 ---
 spring.profiles: backend
 server:
@@ -57,3 +57,13 @@ spring:
   zipkin:
     service:
       name: hee-module
+---
+spring.profiles: rabbit
+server:
+  port: 7003
+spring:
+  application:
+    name: hee-rabbit
+  zipkin:
+    service:
+      name: hee-rabbit

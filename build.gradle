@@ -20,21 +20,15 @@ ext {
 dependencies {
 	
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	
 	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
 	implementation 'org.springframework.cloud:spring-cloud-starter-zipkin'
 	
-	implementation 'org.springframework.boot:spring-boot-starter-amqp'
-	implementation 'org.springframework.cloud:spring-cloud-sleuth-stream'
 	implementation 'org.springframework.cloud:spring-cloud-stream-binder-rabbit'
-	
 	implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
-//	implementation 'org.springframework.cloud:spring-cloud-stream'
 	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	
-	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.5.0'
-	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.5.0'
 }
 
 dependencyManagement {

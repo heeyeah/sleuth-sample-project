@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
+import com.rabbitmq.http.client.domain.ExchangeType;
 import com.sample.util.LoggingUtil;
 
 
@@ -50,10 +52,15 @@ public class RabbitTest {
 		return LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	}
 	
-	 private final static String QUEUE_NAME = "hello";
+	@Value("${custom.queueName}")
+	private String queueName;
+	
+	@Value("${custom.exchangeName}")
+	private String exchangeName;
+	
 
-	 @Value("${spring.rabbitmq.host}")
-	 private String host;
+	@Value("${spring.rabbitmq.host}")
+	private String host;
 	       
 	@GetMapping(value = "/tmplt/{param}")
 	public String sendMessageForTmplt(@PathVariable String param) throws Exception {
@@ -62,12 +69,14 @@ public class RabbitTest {
 		factory.setHost(host);
 		
 		String message;
-		try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
-			channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+		try (Connection connection = factory.newConnection(); 
+				Channel channel = connection.createChannel()) {
+			channel.queueDeclare(queueName, false, false, false, null);
+			channel.exchangeDeclare(exchangeName, ExchangeTypes.TOPIC); //TODO search exchange topic?
 			
-			message = "Hello World!@ "  + param;
-			channel.basicPublish("", QUEUE_NAME, null, message.getBytes("UTF-8"));
-
+			message = "Hello World! @"  + param;
+			channel.basicPublish(exchangeName, queueName, null, message.getBytes("UTF-8"));
+			
 			logger.info(" [x] Sent '{}' ", message);
 		}
 
@@ -78,9 +87,7 @@ public class RabbitTest {
 	public void recv() throws IOException, TimeoutException {
 		
 		logger.info("============================================");
-		logger.info("============================================");
 		logger.info("========= ========= RECV ========= =========");
-		logger.info("============================================");
 		logger.info("============================================");
 		ConnectionFactory factory = new ConnectionFactory();
 		factory.setHost(host);
@@ -88,7 +95,7 @@ public class RabbitTest {
 		Connection connection = factory.newConnection();
 		Channel channel = connection.createChannel();
 
-		channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+		channel.queueDeclare(queueName, false, false, false, null);
 		
 		DeliverCallback deliverCallback = (consumerTag, delivery) -> {
 			
@@ -98,6 +105,6 @@ public class RabbitTest {
 			logger.info(" [x] Received '{}' ", msg);
 		};
 		
-		channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> {});
+		channel.basicConsume(queueName, true, deliverCallback, consumerTag -> {});
 	}
 }
