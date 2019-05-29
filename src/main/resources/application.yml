@@ -8,14 +8,15 @@ spring:
     service:
       name: hee-frontend
     sender:
-      type: rabbit
+      type: web
+      #type: rabbit
   sleuth:
     sampler:
       probability: 1.0
-    messaging:
-      enabled: true
-      rabbit:
-        enabled: true
+    #messaging:
+    #  enabled: true
+    #  rabbit:
+    #    enabled: true
   rabbitmq:
     host: 192.168.99.100
     username: guest
@@ -24,6 +25,11 @@ spring:
   cloud:
     stream:
       bindings:
+        cloudStreamChannel:
+          destination: apricotExc
+        cloudStreamChannelSink:
+          destination: apricotExc
+          group: apricotQueue
         foodOrdersChannel:
           destination: foodOrders
         input:
@@ -67,3 +73,4 @@ spring:
   zipkin:
     service:
       name: hee-rabbit
+      

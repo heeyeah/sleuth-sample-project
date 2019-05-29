@@ -75,8 +75,7 @@ public class RabbitTest {
 			channel.exchangeDeclare(exchangeName, ExchangeTypes.TOPIC); //TODO search exchange topic?
 			
 			message = "Hello World! @"  + param;
-			channel.basicPublish(exchangeName, queueName, null, message.getBytes("UTF-8"));
-			
+			channel.basicPublish("", queueName, null, message.getBytes("UTF-8"));
 			logger.info(" [x] Sent '{}' ", message);
 		}
 

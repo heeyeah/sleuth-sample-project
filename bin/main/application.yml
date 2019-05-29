@@ -24,6 +24,9 @@ spring:
   cloud:
     stream:
       bindings:
+        cloudStreamChannel:
+          destination: apricotExc
+          group: apricotQueue
         foodOrdersChannel:
           destination: foodOrders
         input:

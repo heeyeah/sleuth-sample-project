@@ -1,5 +1,7 @@
 package com.sample;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.annotation.EnableBinding;
@@ -14,6 +16,7 @@ import brave.sampler.Sampler;
 @SpringBootApplication
 public class SleuthSampleProjectApplication {
 
+	private static final Logger logger = LoggerFactory.getLogger(SleuthSampleProjectApplication.class);
 	public static void main(String[] args) {
 		SpringApplication.run(SleuthSampleProjectApplication.class, args);
 	}
@@ -30,6 +33,6 @@ public class SleuthSampleProjectApplication {
 	
 	@StreamListener(target = Sink.INPUT)
 	public void processCheapMeals(String meal) {
-		System.out.println("This was a great meal!: " + meal);
+		logger.info("This was a great meal!: " + meal);
 	}
 }
